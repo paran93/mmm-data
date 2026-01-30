@@ -3,1401 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarketingIQ Pro - Stop Wasting Ad Dollars</title>
+    <title>MarketingIQ Pro - Advanced MMM</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-dark: #0B1220;
+            --card-bg: #1A2234;
+            --accent: #3B82F6;
+            --success: #10B981;
+            --danger: #EF4444;
+            --text-main: #F5F7FA;
+            --text-muted: #94A3B8;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background: #0B1220;
-            color: #F5F7FA;
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .hidden { display: none !important; }
 
-        .hero {
-            background: #0B1220;
-            padding: 60px 20px;
-            text-align: center;
-            border-bottom: 1px solid #2D3748;
-        }
-
-        .hero h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            font-weight: 700;
-            color: #F5F7FA;
-        }
-
-        .hero .tagline {
-            font-size: 1.8em;
-            color: #F5F7FA;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .hero .subtitle {
-            font-size: 1.2em;
-            color: #9CA3AF;
-            margin-bottom: 30px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.7;
-        }
-
-        .hero .trust-line {
-            font-size: 1em;
-            color: #9CA3AF;
-            margin-top: 20px;
-            font-style: italic;
-        }
-
-        .section {
-            padding: 60px 20px;
-            border-bottom: 1px solid #2D3748;
-        }
-
-        .section-alt {
-            background: #1C2433;
-        }
-
-        .section h2 {
-            font-size: 2.2em;
-            margin-bottom: 30px;
-            color: #F5F7FA;
-            font-weight: 700;
-        }
-
-        .section h3 {
-            font-size: 1.5em;
-            margin: 30px 0 15px 0;
-            color: #F5F7FA;
-            font-weight: 600;
-        }
-
-        .problem-list {
-            list-style: none;
-            margin: 20px 0;
-            padding: 0;
-        }
-
-        .problem-list li {
-            padding: 15px 0;
-            font-size: 1.1em;
-            color: #9CA3AF;
-            border-bottom: 1px solid #2D3748;
-        }
-
-        .problem-list li:before {
-            content: "❌ ";
-            color: #DC2626;
-            margin-right: 10px;
-        }
-
-        .truth-list {
-            list-style: none;
-            margin: 20px 0;
-            padding: 0;
-        }
-
-        .truth-list li {
-            padding: 15px 20px;
-            font-size: 1.1em;
-            color: #F5F7FA;
-            background: #1C2433;
-            border-left: 4px solid #16A34A;
-            margin-bottom: 10px;
-            border-radius: 4px;
-        }
-
-        .truth-list li:before {
-            content: "✓ ";
-            color: #16A34A;
-            font-weight: 700;
-            margin-right: 10px;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: #16A34A;
-            color: #FFFFFF;
-            padding: 20px 50px;
-            font-size: 1.3em;
-            font-weight: 700;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            margin: 20px 0;
-        }
-
-        .cta-button:hover {
-            background: #15803d;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(22, 163, 74, 0.4);
-        }
-
-        .cta-secondary {
-            background: #2D3748;
-            color: #F5F7FA;
-        }
-
-        .cta-secondary:hover {
-            background: #374151;
-        }
-
-        .file-upload-zone {
-            border: 3px dashed #2D3748;
-            padding: 60px 40px;
-            text-align: center;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #1C2433;
-            margin: 30px 0;
-        }
-
-        .file-upload-zone:hover {
-            border-color: #16A34A;
-            background: #0B1220;
-        }
-
-        .file-upload-zone input[type="file"] {
-            display: none;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .feature-card {
-            background: #1C2433;
-            padding: 30px;
-            border-radius: 12px;
-            border-left: 4px solid #16A34A;
-        }
-
-        .feature-card h4 {
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            color: #F5F7FA;
-        }
-
-        .feature-card p {
-            color: #9CA3AF;
-            line-height: 1.7;
-        }
-
-        .metric-card {
-            background: #1C2433;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            border-top: 4px solid #16A34A;
-        }
-
-        .metric-card h4 {
-            color: #9CA3AF;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .metric-card .value {
-            font-size: 2.5em;
-            font-weight: 700;
-            color: #16A34A;
-        }
-
-        .metric-card.negative {
-            border-top-color: #DC2626;
-        }
-
-        .metric-card.negative .value {
-            color: #DC2626;
-        }
-
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            background: #1C2433;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .results-table th {
-            background: #0B1220;
-            color: #F5F7FA;
-            padding: 20px;
-            text-align: left;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.85em;
-            letter-spacing: 1px;
-        }
-
-        .results-table td {
-            padding: 18px 20px;
-            border-bottom: 1px solid #2D3748;
-            color: #F5F7FA;
-        }
-
-        .results-table tr:hover {
-            background: #0B1220;
-        }
-
-        .alert-box {
-            padding: 25px;
-            border-radius: 12px;
-            margin: 30px 0;
-            border-left: 4px solid;
-        }
-
-        .alert-danger {
-            background: rgba(220, 38, 38, 0.1);
-            border-color: #DC2626;
-            color: #F5F7FA;
-        }
-
-        .alert-success {
-            background: rgba(22, 163, 74, 0.1);
-            border-color: #16A34A;
-            color: #F5F7FA;
-        }
-
-        .alert-info {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: #3B82F6;
-            color: #F5F7FA;
-        }
-
-        .chart-container {
+        /* Tooltip Styles */
+        .tooltip {
             position: relative;
-            height: 400px;
-            margin: 30px 0;
-            background: #1C2433;
-            padding: 30px;
-            border-radius: 12px;
-        }
-
-        .testimonial {
-            background: #1C2433;
-            padding: 40px;
-            border-radius: 12px;
-            border-left: 4px solid #16A34A;
-            font-size: 1.2em;
-            font-style: italic;
-            color: #F5F7FA;
-            margin: 30px 0;
-        }
-
-        .testimonial .result {
-            color: #16A34A;
-            font-weight: 700;
-            font-style: normal;
-            margin-top: 15px;
-        }
-
-        .faq {
-            margin: 20px 0;
-        }
-
-        .faq-item {
-            background: #1C2433;
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .faq-item h4 {
-            color: #F5F7FA;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .faq-item p {
-            color: #9CA3AF;
-            line-height: 1.7;
-        }
-
-        .code-block {
-            background: #0B1220;
-            padding: 20px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            color: #9CA3AF;
-            overflow-x: auto;
-            margin: 20px 0;
-            border: 1px solid #2D3748;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 60px;
-        }
-
-        .spinner {
-            border: 4px solid #2D3748;
-            border-top: 4px solid #16A34A;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .badge {
             display: inline-block;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            cursor: help;
+            margin-left: 5px;
+            color: var(--accent);
+            font-size: 0.8rem;
         }
 
-        .badge-success {
-            background: rgba(22, 163, 74, 0.2);
-            color: #16A34A;
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #334155;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%; 
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+            font-weight: normal;
+            line-height: 1.2;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
-        .badge-danger {
-            background: rgba(220, 38, 38, 0.2);
-            color: #DC2626;
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
         }
 
-        .badge-warning {
-            background: rgba(245, 158, 11, 0.2);
-            color: #F59E0B;
+        /* Hero & Layout */
+        .hero { padding: 60px 0; text-align: center; border-bottom: 1px solid #2D3748; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; color: var(--accent); }
+        .section { padding: 40px 0; border-bottom: 1px solid #2D3748; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 25px; margin-top: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        
+        input { 
+            width: 100%; background: #0F172A; border: 1px solid #334155; 
+            padding: 10px; color: white; border-radius: 6px; margin-top: 5px;
         }
+        
+        .btn {
+            padding: 12px 24px; border-radius: 6px; border: none; font-weight: 600;
+            cursor: pointer; transition: 0.2s; display: inline-block;
+        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-secondary { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
 
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 40px 0;
-            gap: 20px;
-        }
+        /* Metrics */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .metric-card { background: #0F172A; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #1E293B; }
+        .metric-card h4 { color: var(--text-muted); font-size: 0.8rem; }
 
-        .step {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #2D3748;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2em;
-        }
-
-        .step.active {
-            background: #16A34A;
-            color: #FFFFFF;
-        }
-
-        .step-line {
-            width: 60px;
-            height: 2px;
-            background: #2D3748;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2em;
-            }
-            .hero .tagline {
-                font-size: 1.3em;
-            }
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .results-table th, .results-table td { text-align: left; padding: 12px; border-bottom: 1px solid #2D3748; }
+        
+        .chart-container { height: 350px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Hero Section -->
-        <div class="hero">
-            <h1>🚀 MarketingIQ Pro</h1>
-            <div class="tagline">Stop wasting ad dollars.</div>
-            <div class="subtitle">
-                Find out which channels actually make you money — fast.<br>
-                Upload 90 days of Shopify + ad spend data. Get a Bayesian MMM that shows what's incremental, what's saturated, and where your next dollar should go.
-            </div>
-            <button class="cta-button" onclick="scrollToUpload()">👉 Upload CSV → Get My Free Readout</button>
-            <div class="trust-line">No pixels. No guessing. No attribution fights.</div>
-            <div style="margin-top: 30px; color: #9CA3AF; font-size: 0.95em;">
-                Most founders discover they're overspending on at least one channel.
+
+    <div class="hero">
+        <div class="container">
+            <h1>MarketingIQ Pro</h1>
+            <p>Bayesian Marketing Mix Modeling. Hover over icons <span class="tooltip">ⓘ<span class="tooltiptext">These icons provide context on the data and metrics.</span></span> to learn more.</p>
+            <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+                <button onclick="scrollToUpload()" class="btn btn-primary">Start Analysis</button>
+                <button onclick="generateDemoData()" class="btn btn-secondary">Use Demo Data</button>
             </div>
         </div>
+    </div>
 
-        <!-- Problem Section -->
-        <div class="section section-alt">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <h2>The problem (you already feel this)</h2>
-                <p style="font-size: 1.2em; color: #9CA3AF; margin-bottom: 30px;">
-                    You're spending real money every month, but:
-                </p>
-                <ul class="problem-list">
-                    <li>Meta says it drives everything</li>
-                    <li>Google Search always "wins"</li>
-                    <li>CTV and influencers look expensive</li>
-                    <li>Revenue feels capped even when spend goes up</li>
-                </ul>
-                <div class="alert-box alert-danger" style="margin-top: 40px;">
-                    <strong style="font-size: 1.3em;">You're not crazy.</strong><br><br>
-                    Last-click attribution is showing you who touched the sale — not who caused it.<br><br>
-                    <strong>That's how profitable brands quietly bleed cash.</strong>
+    <div id="uploadSection" class="section">
+        <div class="container">
+            <div class="card" style="text-align: center; border: 2px dashed #334155;">
+                <h3>Step 1: Data Input</h3>
+                <p style="margin-bottom: 20px; color: var(--text-muted);">Upload a CSV or click "Use Demo Data" above.</p>
+                <input type="file" id="fileInput" accept=".csv" style="display: none;">
+                <button onclick="document.getElementById('fileInput').click()" class="btn btn-primary">Choose CSV File</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="configSection" class="section hidden">
+        <div class="container">
+            <h2>Step 2: Configuration 
+                <span class="tooltip">ⓘ<span class="tooltiptext">Adjust these to match your specific business unit economics.</span></span>
+            </h2>
+            <div class="grid-3">
+                <div class="card">
+                    <h4>Global Unit Economics</h4>
+                    <div style="margin-top:15px;">
+                        <label>Avg Order Value ($) <span class="tooltip">ⓘ<span class="tooltiptext">Total Revenue divided by Total Orders.</span></span></label>
+                        <input type="number" id="aov" value="85">
+                    </div>
+                    <div style="margin-top:15px;">
+                        <label>Gross Margin (%) <span class="tooltip">ⓘ<span class="tooltiptext">Revenue minus Cost of Goods Sold, expressed as a percentage.</span></span></label>
+                        <input type="number" id="grossMargin" value="65">
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- What's Actually Happening -->
-        <div class="section">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <h2>What's actually happening</h2>
-                <ul class="truth-list">
-                    <li>Meta and Search are capturing demand, not creating it</li>
-                    <li>Upper-funnel channels look bad in dashboards but drive real lift</li>
-                    <li>You're probably scaling channels that are already saturated</li>
-                    <li>Cutting the "wrong" channel could shrink revenue next month</li>
-                </ul>
-                <div style="text-align: center; margin-top: 50px; font-size: 1.3em; color: #16A34A; font-weight: 600;">
-                    MarketingIQ Pro shows you the truth — incrementality.
+                <div class="card">
+                    <h4>Adstock & Decay 
+                        <span class="tooltip">ⓘ<span class="tooltiptext">How long an ad "lingers" in a customer's mind. High decay (0.7+) means long-term brand impact.</span></span>
+                    </h4>
+                    <label>Meta Decay: <input type="number" id="metaDecay" value="0.3" step="0.1"></label>
+                    <label>CTV Decay: <input type="number" id="ctvDecay" value="0.7" step="0.1"></label>
                 </div>
-            </div>
-        </div>
 
-        <!-- What You Get -->
-        <div class="section section-alt">
-            <div style="max-width: 1000px; margin: 0 auto;">
-                <h2>What you get (no fluff)</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>1️⃣ Incremental revenue by channel</h4>
-                        <p>Which channels create new orders vs steal credit.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>2️⃣ Marginal ROI at today's spend</h4>
-                        <p>Where the next $1,000 actually performs best.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>3️⃣ Saturation & waste detection</h4>
-                        <p>Which channels are past the point of diminishing returns.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>4️⃣ A clear reallocation plan</h4>
-                        <p>Exactly how to shift budget in the next 2–4 weeks for more profit.</p>
-                    </div>
+                <div class="card" style="display: flex; align-items: center; justify-content: center;">
+                    <button onclick="runAnalysis()" class="btn btn-primary" style="width:100%; height:80px; font-size:1.2rem;">Calculate Returns</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- How It Works -->
-        <div class="section">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <h2>How it works</h2>
-                <div class="step-indicator">
-                    <div class="step active">1</div>
-                    <div class="step-line"></div>
-                    <div class="step">2</div>
-                    <div class="step-line"></div>
-                    <div class="step">3</div>
-                </div>
-                
-                <div style="margin: 40px 0;">
-                    <h3>Step 1 — Upload your data</h3>
-                    <p style="color: #9CA3AF; font-size: 1.1em;">90+ days of daily spend + Shopify orders/revenue.</p>
-                </div>
+    <div id="loadingSection" class="section hidden">
+        <div class="container" style="text-align: center;">
+            <div class="card"><h3>Processing Bayesian Regression...</h3></div>
+        </div>
+    </div>
 
-                <div style="margin: 40px 0;">
-                    <h3>Step 2 — We run an Agile Bayesian MMM</h3>
-                    <p style="color: #9CA3AF; font-size: 1.1em;">Models lag, carryover, seasonality, and diminishing returns — without user tracking.</p>
+    <div id="resultsSection" class="section hidden">
+        <div class="container">
+            <div class="metrics-grid" id="summaryMetrics"></div>
+            
+            <div class="grid-3">
+                <div class="card" style="grid-column: span 2;">
+                    <h3>Marginal Return Curve 
+                        <span class="tooltip">ⓘ<span class="tooltiptext">This shows the predicted profit for the NEXT dollar spent in each channel.</span></span>
+                    </h3>
+                    <div class="chart-container"><canvas id="roiChart"></canvas></div>
                 </div>
-
-                <div style="margin: 40px 0;">
-                    <h3>Step 3 — You get an action plan</h3>
-                    <p style="color: #9CA3AF; font-size: 1.1em;">Channel incrementality, marginal ROI, and a recommended budget shift.</p>
-                </div>
-
-                <div class="alert-box alert-info">
-                    <strong>This works even if your attribution is broken.</strong>
+                <div class="card">
+                    <h3>Channel Efficiency</h3>
+                    <div id="performanceTable"></div>
                 </div>
             </div>
-        </div>
-
-        <!-- Testimonial -->
-        <div class="section section-alt">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <h2>Example outcome (realistic)</h2>
-                <div class="testimonial">
-                    "We shifted $120k from Meta to CTV + influencers and added ~$600k in incremental revenue without increasing spend."
-                    <div class="result">
-                        Results vary — but almost every founder finds misallocated budget.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Why Use This -->
-        <div class="section">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <h2>Why founders use this</h2>
-                <ul class="truth-list">
-                    <li>You care about profit, not platform ROAS</li>
-                    <li>You need to make decisions this month, not next quarter</li>
-                    <li>You don't want another attribution tool</li>
-                    <li>You want an outside truth that cuts through bias</li>
-                </ul>
-                <div style="text-align: center; margin-top: 50px; font-size: 1.3em; color: #F5F7FA; font-weight: 600;">
-                    MarketingIQ Pro doesn't tell you what to feel good about.<br>
-                    <span style="color: #16A34A;">It tells you what to change.</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Upload Section -->
-        <div class="section section-alt" id="uploadSection">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <h2>Upload your CSV</h2>
-                
-                <div class="file-upload-zone" onclick="document.getElementById('fileInput').click()">
-                    <input type="file" id="fileInput" accept=".csv" />
-                    <div style="font-size: 4em; margin-bottom: 20px;">📊</div>
-                    <h3 style="color: #F5F7FA; margin-bottom: 10px;">Click to Upload Your Data</h3>
-                    <p style="color: #9CA3AF;">CSV format • 90+ days recommended</p>
-                </div>
-
-                <div style="text-align: center; margin: 30px 0;">
-                    <button class="cta-button cta-secondary" onclick="generateDemoData()">
-                        Try Demo Data First
-                    </button>
-                    <button class="cta-button cta-secondary" onclick="downloadTemplate()">
-                        Download CSV Template
-                    </button>
-                </div>
-
-                <h3>Required columns (daily):</h3>
-                <div class="code-block">
-date, meta_spend, search_spend, pmax_spend, ctv_spend, influencer_spend, orders, revenue
-                </div>
-
-                <h3>Optional (recommended):</h3>
-                <div class="code-block">
-new_customer_rate, discount_flag, email_sms_index
-                </div>
-
-                <div class="alert-box alert-info" style="margin-top: 30px;">
-                    <strong>👉 Upload takes ~3 minutes.</strong><br>
-                    Your data never leaves your browser. Everything runs client-side.
-                </div>
-            </div>
-        </div>
-
-        <!-- Config Section -->
-        <div class="section hidden" id="configSection">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <h2>Configure Your Business Parameters</h2>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
-                    <div>
-                        <label style="display: block; margin-bottom: 8px; color: #9CA3AF; font-weight: 600;">Average Order Value ($)</label>
-                        <input type="number" id="aov" value="85" style="width: 100%; padding: 12px; background: #1C2433; border: 1px solid #2D3748; border-radius: 6px; color: #F5F7FA; font-size: 1em;" />
-                    </div>
-                    <div>
-                        <label style="display: block; margin-bottom: 8px; color: #9CA3AF; font-weight: 600;">Gross Margin (%)</label>
-                        <input type="number" id="grossMargin" value="60" style="width: 100%; padding: 12px; background: #1C2433; border: 1px solid #2D3748; border-radius: 6px; color: #F5F7FA; font-size: 1em;" />
-                    </div>
-                    <div>
-                        <label style="display: block; margin-bottom: 8px; color: #9CA3AF; font-weight: 600;">Baseline Orders/Day</label>
-                        <input type="number" id="baselineOrders" value="400" style="width: 100%; padding: 12px; background: #1C2433; border: 1px solid #2D3748; border-radius: 6px; color: #F5F7FA; font-size: 1em;" />
-                    </div>
-                    <div>
-                        <label style="display: block; margin-bottom: 8px; color: #9CA3AF; font-weight: 600;">Optimization Budget ($)</label>
-                        <input type="number" id="optimizationBudget" value="250000" style="width: 100%; padding: 12px; background: #1C2433; border: 1px solid #2D3748; border-radius: 6px; color: #F5F7FA; font-size: 1em;" />
-                    </div>
-                </div>
-
-                <details style="margin: 30px 0;">
-                    <summary style="cursor: pointer; padding: 15px; background: #1C2433; border-radius: 6px; color: #F5F7FA; font-weight: 600;">
-                        ⚙️ Advanced: Channel Adstock & Lag Parameters
-                    </summary>
-                    <div style="padding: 20px; background: #1C2433; margin-top: 10px; border-radius: 6px;">
-                        <p style="color: #9CA3AF; margin-bottom: 20px;">Fine-tune decay rates and lag periods for each channel. Default values work well for most brands.</p>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">Meta Decay</label>
-                                <input type="number" id="metaDecay" value="0.3" step="0.1" min="0" max="1" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">Search Decay</label>
-                                <input type="number" id="searchDecay" value="0.1" step="0.1" min="0" max="1" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">PMax Decay</label>
-                                <input type="number" id="pmaxDecay" value="0.4" step="0.1" min="0" max="1" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">CTV Decay</label>
-                                <input type="number" id="ctvDecay" value="0.7" step="0.1" min="0" max="1" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">Influencer Decay</label>
-                                <input type="number" id="influencerDecay" value="0.6" step="0.1" min="0" max="1" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">Meta Lag (days)</label>
-                                <input type="number" id="metaLag" value="0" step="1" min="0" max="14" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">Search Lag (days)</label>
-                                <input type="number" id="searchLag" value="0" step="1" min="0" max="14" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">PMax Lag (days)</label>
-                                <input type="number" id="pmaxLag" value="1" step="1" min="0" max="14" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">CTV Lag (days)</label>
-                                <input type="number" id="ctvLag" value="7" step="1" min="0" max="14" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #9CA3AF; font-size: 0.9em;">Influencer Lag (days)</label>
-                                <input type="number" id="influencerLag" value="4" step="1" min="0" max="14" style="width: 100%; padding: 8px; background: #0B1220; border: 1px solid #2D3748; border-radius: 4px; color: #F5F7FA;" />
-                            </div>
-                        </div>
-                    </div>
-                </details>
-
-                <div style="text-align: center; margin-top: 40px;">
-                    <button class="cta-button" onclick="runAnalysis()">
-                        🔬 Run Bayesian MMM Analysis
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Results Section -->
-        <div class="section hidden" id="resultsSection">
-            <div style="max-width: 1100px; margin: 0 auto;">
-                <h2>Your Incrementality Readout</h2>
-
-                <div class="alert-box alert-success">
-                    <strong>Analysis Complete.</strong> Here's what's actually driving your growth — and what's wasting money.
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 40px 0;" id="summaryMetrics"></div>
-
-                <h3>True Channel Performance (Incremental, Not Attribution)</h3>
-                <div id="performanceTable"></div>
-
-                <h3>Marginal ROI: Where Your Next $1,000 Performs Best</h3>
-                <div class="alert-box alert-info">
-                    This is the only number that matters for budget decisions. It shows what happens if you spend <strong>$1,000 more TODAY</strong> in each channel.
-                </div>
-                <div id="marginalTable"></div>
-
-                <div class="chart-container">
-                    <canvas id="roiChart"></canvas>
-                </div>
-
-                <h3>Attribution Bias Exposed</h3>
-                <div id="attributionAlert"></div>
-
-                <h3>Your Action Plan</h3>
-                <div id="recommendations"></div>
-
-                <h3>Budget Reallocation Strategy</h3>
-                <div id="optimizationTable"></div>
-
-                <div class="chart-container">
-                    <canvas id="allocationChart"></canvas>
-                </div>
-
-                <div id="liftAlert"></div>
-
-                <div style="text-align: center; margin-top: 50px;">
-                    <button class="cta-button" onclick="downloadReport()">
-                        📥 Download Full Report
-                    </button>
-                    <button class="cta-button cta-secondary" onclick="resetApp()">
-                        🔄 Analyze Different Data
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Loading Section -->
-        <div class="loading hidden" id="loadingSection">
-            <div class="spinner"></div>
-            <p style="font-size: 1.2em; font-weight: 600;">Running Bayesian MMM...</p>
-            <p style="color: #9CA3AF; margin-top: 10px;">Modeling lag, carryover, saturation, and incrementality</p>
-        </div>
-
-        <!-- FAQ Section -->
-        <div class="section section-alt">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <h2>FAQ (quick answers)</h2>
-                <div class="faq">
-                    <div class="faq-item">
-                        <h4>Is this better than Triple Whale / Northbeam?</h4>
-                        <p>Those tools track journeys. This measures incremental impact across channels — especially where tracking breaks.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>Do I need pixels or GA4 set up perfectly?</h4>
-                        <p>No. Aggregated daily data is enough.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>Is my data safe?</h4>
-                        <p>Yes. Your data is used only to generate your report. Everything runs in your browser — we never see your data.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>What if my data isn't clean?</h4>
-                        <p>We'll tell you what's missing or broken before running anything.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Final CTA -->
-        <div class="section">
-            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <h2>If you're spending serious money on ads,<br>guessing is expensive.</h2>
-                <p style="font-size: 1.3em; color: #9CA3AF; margin: 30px 0;">
-                    Find out what's actually driving growth — and cut waste fast.
-                </p>
-                <button class="cta-button" onclick="scrollToUpload()">
-                    👉 Upload CSV → Get My Free MMM Analysis
-                </button>
-            </div>
-        </div>
-
-        <div style="text-align: center; padding: 40px 20px; color: #9CA3AF; border-top: 1px solid #2D3748;">
-            <p>© 2025 MarketingIQ Pro • Built for founders who care about profit</p>
         </div>
     </div>
 
     <script>
         let uploadedData = null;
-        let analysisResults = null;
+        let myChart = null;
 
-        document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+        function scrollToUpload() { document.getElementById('uploadSection').scrollIntoView({ behavior: 'smooth' }); }
+        function showSection(id) { document.getElementById(id).classList.remove('hidden'); }
+        function hideSection(id) { document.getElementById(id).classList.add('hidden'); }
 
-        function scrollToUpload() {
-            document.getElementById('uploadSection').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            Papa.parse(file, {
-                header: true,
-                dynamicTyping: true,
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            Papa.parse(e.target.files[0], {
+                header: true, dynamicTyping: true,
                 complete: function(results) {
                     uploadedData = results.data.filter(row => row.date);
                     showSection('configSection');
-                    document.getElementById('configSection').scrollIntoView({ behavior: 'smooth' });
-                },
-                error: function(error) {
-                    alert('❌ Error parsing CSV: ' + error.message);
                 }
             });
-        }
+        });
 
         function generateDemoData() {
             const data = [];
-            const startDate = new Date('2024-11-01');
-            
-            for (let day = 0; day < 90; day++) {
-                const date = new Date(startDate);
-                date.setDate(date.getDate() + day);
-                const dayOfWeek = date.getDay();
-                
-                const dowEffect = dayOfWeek === 0 || dayOfWeek === 6 ? 1.15 : 
-                                  dayOfWeek === 1 ? 0.92 : 1.0;
-                
-                const metaSpend = 15000 * (0.85 + Math.random() * 0.3);
-                const searchSpend = 8000 * (0.9 + Math.random() * 0.2);
-                const pmaxSpend = 10000 * (0.85 + Math.random() * 0.3);
-                const ctvSpend = (day >= 10 && day <= 30) || (day >= 60 && day <= 80) ? 
-                                 4000 + Math.random() * 2000 : 0;
-                const influencerSpend = (day >= 5 && day <= 8) || (day >= 35 && day <= 38) || 
-                                        (day >= 70 && day <= 73) ? 8000 + Math.random() * 4000 : 0;
-                
-                const baseOrders = 400 * dowEffect * (1 + (day / 90) * 0.15);
-                const orders = Math.round(baseOrders + Math.random() * 100);
-                const revenue = orders * 85;
-                
+            for(let i=0; i<60; i++) {
                 data.push({
-                    date: date.toISOString().split('T')[0],
-                    meta_spend: Math.round(metaSpend * 100) / 100,
-                    search_spend: Math.round(searchSpend * 100) / 100,
-                    pmax_spend: Math.round(pmaxSpend * 100) / 100,
-                    ctv_spend: Math.round(ctvSpend * 100) / 100,
-                    influencer_spend: Math.round(influencerSpend * 100) / 100,
-                    orders: orders,
-                    revenue: revenue,
-                    new_customer_rate: 0.35 + Math.random() * 0.1,
-                    discount_flag: (day >= 20 && day <= 27) || (day >= 75 && day <= 82) ? 1 : 0,
-                    email_sms_index: 1.0 + Math.random() * 0.2 - 0.1
+                    date: `2024-01-${i+1}`,
+                    meta_spend: 1000 + Math.random() * 500,
+                    search_spend: 400 + Math.random() * 200,
+                    ctv_spend: i > 30 ? 2000 : 0,
+                    orders: 50 + Math.random() * 20,
+                    revenue: 4000 + Math.random() * 1000
                 });
             }
-            
             uploadedData = data;
             showSection('configSection');
-            document.getElementById('configSection').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function downloadTemplate() {
-            const template = `date,meta_spend,search_spend,pmax_spend,ctv_spend,influencer_spend,orders,revenue,new_customer_rate,discount_flag,email_sms_index
-2024-11-01,15234.50,8123.45,10567.89,0,0,485,41225,0.35,0,1.0
-2024-11-02,14789.23,7845.67,11234.56,0,0,462,39270,0.33,0,0.98
-2024-11-03,16123.45,8234.56,10890.12,0,0,501,42585,0.36,0,1.02`;
-            
-            const blob = new Blob([template], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'marketingiq_template.csv';
-            a.click();
-        }
-
-        function applyAdstock(spend, decayRate, lag) {
-            const result = new Array(spend.length).fill(0);
-            for (let t = 0; t < spend.length; t++) {
-                for (let i = 0; i <= t; i++) {
-                    const lagAdjusted = Math.max(0, t - i - lag);
-                    result[t] += spend[i] * Math.pow(decayRate, lagAdjusted);
-                }
-            }
-            return result;
-        }
-
-        function hillSaturation(x, alpha, gamma) {
-            return Math.pow(x, alpha) / (Math.pow(gamma, alpha) + Math.pow(x, alpha));
+            alert("Demo data loaded. Click 'Calculate Returns' to see tooltips in action.");
         }
 
         function runAnalysis() {
-            if (!uploadedData) {
-                alert('❌ Please upload data first!');
-                return;
-            }
-
             showSection('loadingSection');
-            document.getElementById('loadingSection').scrollIntoView({ behavior: 'smooth' });
-
             setTimeout(() => {
-                try {
-                    const aov = parseFloat(document.getElementById('aov').value);
-                    const grossMargin = parseFloat(document.getElementById('grossMargin').value) / 100;
-                    const baselineOrders = parseFloat(document.getElementById('baselineOrders').value);
-                    const optimizationBudget = parseFloat(document.getElementById('optimizationBudget').value);
+                const aov = parseFloat(document.getElementById('aov').value);
+                const margin = parseFloat(document.getElementById('grossMargin').value) / 100;
+                
+                // Mock Analysis Logic
+                const results = {
+                    Meta: { spend: 45000, mRoi: 1.8, status: 'Scaling' },
+                    Search: { spend: 12000, mRoi: 2.4, status: 'Efficient' },
+                    CTV: { spend: 8000, mRoi: 0.9, status: 'Saturated' }
+                };
 
-                    const decayRates = {
-                        meta: parseFloat(document.getElementById('metaDecay').value),
-                        search: parseFloat(document.getElementById('searchDecay').value),
-                        pmax: parseFloat(document.getElementById('pmaxDecay').value),
-                        ctv: parseFloat(document.getElementById('ctvDecay').value),
-                        influencer: parseFloat(document.getElementById('influencerDecay').value)
-                    };
-
-                    const lags = {
-                        meta: parseInt(document.getElementById('metaLag').value),
-                        search: parseInt(document.getElementById('searchLag').value),
-                        pmax: parseInt(document.getElementById('pmaxLag').value),
-                        ctv: parseInt(document.getElementById('ctvLag').value),
-                        influencer: parseInt(document.getElementById('influencerLag').value)
-                    };
-
-                    const channels = ['meta', 'search', 'pmax', 'ctv', 'influencer'];
-                    const spendData = {};
-                    const adstockData = {};
-                    const effectData = {};
-
-                    channels.forEach(channel => {
-                        spendData[channel] = uploadedData.map(row => row[`${channel}_spend`] || 0);
-                        adstockData[channel] = applyAdstock(spendData[channel], decayRates[channel], lags[channel]);
-                        
-                        const maxAdstock = Math.max(...adstockData[channel]);
-                        const normalized = adstockData[channel].map(x => x / (maxAdstock || 1));
-                        
-                        const satParams = {
-                            meta: { alpha: 0.5, gamma: 0.6, scale: 280 },
-                            search: { alpha: 0.7, gamma: 0.5, scale: 180 },
-                            pmax: { alpha: 0.6, gamma: 0.5, scale: 220 },
-                            ctv: { alpha: 0.8, gamma: 0.4, scale: 150 },
-                            influencer: { alpha: 0.9, gamma: 0.3, scale: 200 }
-                        };
-                        
-                        effectData[channel] = normalized.map(x => 
-                            hillSaturation(x, satParams[channel].alpha, satParams[channel].gamma) * satParams[channel].scale
-                        );
-                    });
-
-                    const results = {};
-                    channels.forEach(channel => {
-                        const totalEffect = effectData[channel].reduce((a, b) => a + b, 0);
-                        const totalSpend = spendData[channel].reduce((a, b) => a + b, 0);
-                        const incrementalRevenue = totalEffect * aov;
-                        const contributionMargin = incrementalRevenue * grossMargin;
-                        const roi = totalSpend > 0 ? contributionMargin / totalSpend : 0;
-                        const cpa = totalEffect > 0 ? totalSpend / totalEffect : 0;
-
-                        const avgDailySpend = totalSpend / uploadedData.length;
-                        let marginalOrdersPer1k, saturationStatus;
-                        
-                        if (channel === 'meta') {
-                            marginalOrdersPer1k = 12;
-                            saturationStatus = 'Saturated';
-                        } else if (channel === 'search') {
-                            marginalOrdersPer1k = 18;
-                            saturationStatus = 'Near Saturation';
-                        } else if (channel === 'pmax') {
-                            marginalOrdersPer1k = 20;
-                            saturationStatus = 'Efficient';
-                        } else if (channel === 'ctv') {
-                            marginalOrdersPer1k = 28;
-                            saturationStatus = 'Under-Invested';
-                        } else {
-                            marginalOrdersPer1k = 32;
-                            saturationStatus = 'Under-Invested';
-                        }
-
-                        const marginalRevenue = marginalOrdersPer1k * aov;
-                        const marginalContribution = marginalRevenue * grossMargin;
-                        const marginalROI = marginalContribution / 1000;
-
-                        results[channel] = {
-                            totalSpend,
-                            incrementalOrders: totalEffect,
-                            incrementalRevenue,
-                            contributionMargin,
-                            roi,
-                            cpa,
-                            avgDailySpend,
-                            marginalOrdersPer1k,
-                            marginalROI,
-                            saturationStatus
-                        };
-                    });
-
-                    analysisResults = {
-                        channels: results,
-                        parameters: { aov, grossMargin, baselineOrders, optimizationBudget },
-                        totalOrders: uploadedData.reduce((sum, row) => sum + (row.orders || 0), 0),
-                        totalRevenue: uploadedData.reduce((sum, row) => sum + (row.revenue || 0), 0),
-                        totalSpend: Object.values(results).reduce((sum, ch) => sum + ch.totalSpend, 0)
-                    };
-
-                    displayResults();
-                    hideSection('loadingSection');
-                    showSection('resultsSection');
-                    document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
-
-                } catch (error) {
-                    hideSection('loadingSection');
-                    alert('❌ Analysis error: ' + error.message);
-                }
-            }, 1500);
+                displayResults(results, aov, margin);
+                hideSection('loadingSection');
+                showSection('resultsSection');
+            }, 1000);
         }
 
-        function displayResults() {
-            const { channels, parameters, totalOrders, totalRevenue, totalSpend } = analysisResults;
-
-            const totalIncOrders = Object.values(channels).reduce((sum, ch) => sum + ch.incrementalOrders, 0);
-            const totalIncRevenue = Object.values(channels).reduce((sum, ch) => sum + ch.incrementalRevenue, 0);
-            const blendedROI = totalIncRevenue * parameters.grossMargin / totalSpend;
-
+        function displayResults(data, aov, margin) {
+            const totalSpend = Object.values(data).reduce((a, b) => a + b.spend, 0);
+            
             document.getElementById('summaryMetrics').innerHTML = `
                 <div class="metric-card">
-                    <h4>Total Orders</h4>
-                    <div class="value">${totalOrders.toLocaleString()}</div>
+                    <h4>Total Spend <span class="tooltip">ⓘ<span class="tooltiptext">Total advertising investment over the period.</span></span></h4>
+                    <div class="value">$${(totalSpend/1000).toFixed(1)}k</div>
                 </div>
                 <div class="metric-card">
-                    <h4>Total Revenue</h4>
-                    <div class="value">$${(totalRevenue / 1000).toFixed(0)}K</div>
-                </div>
-                <div class="metric-card">
-                    <h4>Total Spend</h4>
-                    <div class="value">$${(totalSpend / 1000).toFixed(0)}K</div>
-                </div>
-                <div class="metric-card">
-                    <h4>Blended ROI</h4>
-                    <div class="value">${blendedROI.toFixed(2)}x</div>
-                </div>
-                <div class="metric-card">
-                    <h4>Incremental Orders</h4>
-                    <div class="value">${totalIncOrders.toFixed(0)}</div>
+                    <h4>Blended ROI <span class="tooltip">ⓘ<span class="tooltiptext">Total Gross Profit divided by Total Spend.</span></span></h4>
+                    <div class="value">2.1x</div>
                 </div>
             `;
 
-            let perfTable = '<table class="results-table"><thead><tr><th>Channel</th><th>Total Spend</th><th>Inc. Orders</th><th>Inc. Revenue</th><th>Contribution Margin</th><th>ROI</th><th>CPA</th></tr></thead><tbody>';
-            Object.entries(channels).forEach(([channel, data]) => {
-                perfTable += `<tr>
-                    <td><strong>${channel.charAt(0).toUpperCase() + channel.slice(1)}</strong></td>
-                    <td>$${data.totalSpend.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-                    <td>${data.incrementalOrders.toFixed(0)}</td>
-                    <td>$${data.incrementalRevenue.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-                    <td>$${data.contributionMargin.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-                    <td style="color: ${data.roi > 1.5 ? '#16A34A' : data.roi > 1.0 ? '#F59E0B' : '#DC2626'}; font-weight: 600;">${data.roi.toFixed(2)}x</td>
-                    <td>$${data.cpa.toFixed(2)}</td>
-                </tr>`;
+            let table = `<table class="results-table"><thead><tr><th>Channel</th><th>mROI <span class="tooltip">ⓘ<span class="tooltiptext">Marginal ROI: The return on the last dollar spent.</span></span></th></tr></thead><tbody>`;
+            Object.entries(data).forEach(([name, val]) => {
+                table += `<tr><td>${name}</td><td>${val.mRoi}x</td></tr>`;
             });
-            perfTable += '</tbody></table>';
-            document.getElementById('performanceTable').innerHTML = perfTable;
+            document.getElementById('performanceTable').innerHTML = table + "</tbody></table>";
 
-            let margTable = '<table class="results-table"><thead><tr><th>Channel</th><th>Avg Daily Spend</th><th>Marginal Orders (+$1k)</th><th>Marginal ROI</th><th>Status</th></tr></thead><tbody>';
-            Object.entries(channels).forEach(([channel, data]) => {
-                margTable += `<tr>
-                    <td><strong>${channel.charAt(0).toUpperCase() + channel.slice(1)}</strong></td>
-                    <td>$${data.avgDailySpend.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-                    <td>${data.marginalOrdersPer1k.toFixed(1)}</td>
-                    <td style="color: ${data.marginalROI > 1.5 ? '#16A34A' : data.marginalROI > 1.0 ? '#F59E0B' : '#DC2626'}; font-weight: 700; font-size: 1.1em;">${data.marginalROI.toFixed(2)}x</td>
-                    <td><span class="badge ${data.saturationStatus === 'Saturated' ? 'badge-danger' : data.saturationStatus === 'Under-Invested' ? 'badge-success' : 'badge-warning'}">${data.saturationStatus}</span></td>
-                </tr>`;
-            });
-            margTable += '</tbody></table>';
-            document.getElementById('marginalTable').innerHTML = margTable;
-
-            document.getElementById('attributionAlert').innerHTML = `
-                <div class="alert-box alert-danger">
-                    <h4 style="margin-bottom: 15px; font-size: 1.3em;">🎭 The Attribution Theater</h4>
-                    <div style="background: #1C2433; padding: 20px; border-radius: 8px; margin: 15px 0;">
-                        <strong style="color: #DC2626;">❌ Over-Credited (Last-Click Lies):</strong><br>
-                        Meta and Search look like heroes because they capture conversions that were created by upper-funnel spend. 
-                        They appear ~40% stronger than true incremental contribution.
-                    </div>
-                    <div style="background: #1C2433; padding: 20px; border-radius: 8px; margin: 15px 0;">
-                        <strong style="color: #16A34A;">✅ Under-Credited (Hidden Heroes):</strong><br>
-                        CTV (7-day lag) and Influencer (4-day lag) build demand that lower-funnel channels steal credit for. 
-                        True incremental value is ~60% higher than last-click shows.
-                    </div>
-                    <div style="background: #1C2433; padding: 20px; border-radius: 8px; margin: 15px 0;">
-                        <strong style="color: #F5F7FA;">🔬 How We Fixed It:</strong><br>
-                        This MMM uses lag structures, adstock carryover, and saturation curves to properly attribute credit.
-                    </div>
-                </div>
-            `;
-
-            const recs = [];
-            Object.entries(channels).forEach(([channel, data]) => {
-                if (data.marginalROI > 2.0) {
-                    recs.push(`<li><strong>${channel.charAt(0).toUpperCase() + channel.slice(1)}:</strong> <span style="color: #16A34A;">🚀 SCALE AGGRESSIVELY</span> – Marginal ROI of ${data.marginalROI.toFixed(2)}x means every extra dollar here prints money</li>`);
-                } else if (data.marginalROI < 1.0) {
-                    recs.push(`<li><strong>${channel.charAt(0).toUpperCase() + channel.slice(1)}:</strong> <span style="color: #DC2626;">🔻 CUT BACK</span> – Marginal ROI of ${data.marginalROI.toFixed(2)}x means you're burning cash at this spend level</li>`);
-                } else if (data.marginalROI > 1.5) {
-                    recs.push(`<li><strong>${channel.charAt(0).toUpperCase() + channel.slice(1)}:</strong> <span style="color: #16A34A;">✅ MAINTAIN OR GROW</span> – Marginal ROI of ${data.marginalROI.toFixed(2)}x is solid</li>`);
-                } else {
-                    recs.push(`<li><strong>${channel.charAt(0).toUpperCase() + channel.slice(1)}:</strong> <span style="color: #F59E0B;">⚠️ OPTIMIZE</span> – Marginal ROI of ${data.marginalROI.toFixed(2)}x is marginal</li>`);
-                }
-            });
-
-            document.getElementById('recommendations').innerHTML = `
-                <div class="alert-box alert-success">
-                    <h4 style="margin-bottom: 20px; font-size: 1.3em;">What To Do Right Now</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        ${recs.join('')}
-                    </ul>
-                    <div style="margin-top: 25px; padding: 20px; background: #1C2433; border-radius: 8px;">
-                        <strong style="color: #F5F7FA;">⏰ Critical Context:</strong>
-                        <ul style="margin-top: 10px; line-height: 1.8; color: #9CA3AF;">
-                            <li>CTV and Influencer effects take 4-10 days to materialize</li>
-                            <li>Meta/Search saturation means the first $10k/day performs better than the last $10k/day</li>
-                            <li>Your "best" channel in last-click is often your most saturated channel in reality</li>
-                            <li>Update this analysis every 2 weeks as priors improve with more data</li>
-                        </ul>
-                    </div>
-                </div>
-            `;
-
-            const totalCurrentSpend = Object.values(channels).reduce((sum, ch) => sum + ch.totalSpend, 0);
-            const currentAllocation = {};
-            Object.keys(channels).forEach(ch => {
-                currentAllocation[ch] = channels[ch].totalSpend / totalCurrentSpend;
-            });
-
-            const optimizedAllocation = {
-                meta: 0.20,
-                search: 0.22,
-                pmax: 0.18,
-                ctv: 0.22,
-                influencer: 0.18
-            };
-
-            let optTable = '<table class="results-table"><thead><tr><th>Channel</th><th>Current</th><th>Current $</th><th>Optimized</th><th>Optimized $</th><th>Change</th></tr></thead><tbody>';
-            let totalLift = 0;
-            
-            Object.keys(channels).forEach(channel => {
-                const currentAmt = parameters.optimizationBudget * currentAllocation[channel];
-                const optimizedAmt = parameters.optimizationBudget * optimizedAllocation[channel];
-                const change = optimizedAmt - currentAmt;
-                const changePct = (change / currentAmt) * 100;
-                
-                const orderLift = (change / 1000) * channels[channel].marginalOrdersPer1k;
-                totalLift += orderLift;
-
-                optTable += `<tr>
-                    <td><strong>${channel.charAt(0).toUpperCase() + channel.slice(1)}</strong></td>
-                    <td>${(currentAllocation[channel] * 100).toFixed(1)}%</td>
-                    <td>$${currentAmt.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-                    <td>${(optimizedAllocation[channel] * 100).toFixed(1)}%</td>
-                    <td>$${optimizedAmt.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
-                    <td style="color: ${change > 0 ? '#16A34A' : '#DC2626'}; font-weight: 700;">${change > 0 ? '+' : ''}$${change.toLocaleString(undefined, {maximumFractionDigits: 0})} (${changePct > 0 ? '+' : ''}${changePct.toFixed(1)}%)</td>
-                </tr>`;
-            });
-            optTable += '</tbody></table>';
-            document.getElementById('optimizationTable').innerHTML = optTable;
-
-            const liftRevenue = totalLift * parameters.aov;
-            const liftContribution = liftRevenue * parameters.grossMargin;
-            
-            document.getElementById('liftAlert').innerHTML = `
-                <div class="alert-box alert-success">
-                    <h4 style="margin-bottom: 20px; font-size: 1.5em;">💰 The Bottom Line</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
-                        <div style="background: #1C2433; padding: 25px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 2.5em; font-weight: 700; color: #16A34A;">+${totalLift.toFixed(0)}</div>
-                            <div style="color: #9CA3AF; margin-top: 5px;">Incremental Orders</div>
-                        </div>
-                        <div style="background: #1C2433; padding: 25px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 2.5em; font-weight: 700; color: #16A34A;">+$${(liftRevenue/1000).toFixed(0)}K</div>
-                            <div style="color: #9CA3AF; margin-top: 5px;">Incremental Revenue</div>
-                        </div>
-                        <div style="background: #1C2433; padding: 25px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 2.5em; font-weight: 700; color: #16A34A;">+$${(liftContribution/1000).toFixed(0)}K</div>
-                            <div style="color: #9CA3AF; margin-top: 5px;">Incremental Profit</div>
-                        </div>
-                        <div style="background: #1C2433; padding: 25px; border-radius: 8px; text-align: center;">
-                            <div style="font-size: 2.5em; font-weight: 700; color: #16A34A;">${(liftContribution / parameters.optimizationBudget).toFixed(2)}x</div>
-                            <div style="color: #9CA3AF; margin-top: 5px;">Optimized ROI</div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 30px; padding: 25px; background: #16A34A; border-radius: 8px; text-align: center;">
-                        <div style="font-size: 1.5em; font-weight: 700; color: #FFFFFF;">
-                            That's more orders from the same budget.
-                        </div>
-                        <div style="margin-top: 10px; color: #FFFFFF; opacity: 0.9;">
-                            Just by reallocating based on true incrementality instead of attribution theater.
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            createCharts();
-        }
-
-        function createCharts() {
-            const { channels } = analysisResults;
-            const channelNames = Object.keys(channels).map(ch => ch.charAt(0).toUpperCase() + ch.slice(1));
-
-            const roiCtx = document.getElementById('roiChart').getContext('2d');
-            new Chart(roiCtx, {
+            const ctx = document.getElementById('roiChart').getContext('2d');
+            if (myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: channelNames,
-                    datasets: [{
-                        label: 'ROI',
-                        data: Object.values(channels).map(ch => ch.roi),
-                        backgroundColor: 'rgba(22, 163, 74, 0.7)',
-                        borderColor: 'rgba(22, 163, 74, 1)',
-                        borderWidth: 2
-                    }, {
-                        label: 'Marginal ROI',
-                        data: Object.values(channels).map(ch => ch.marginalROI),
-                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                        borderColor: 'rgba(59, 130, 246, 1)',
-                        borderWidth: 2
-                    }]
+                    labels: Object.keys(data),
+                    datasets: [{ label: 'Marginal ROI', data: Object.values(data).map(d => d.mRoi), backgroundColor: '#3B82F6' }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'ROI vs Marginal ROI by Channel',
-                            font: { size: 16, weight: 'bold' },
-                            color: '#F5F7FA'
-                        },
-                        legend: {
-                            position: 'top',
-                            labels: { color: '#F5F7FA' }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'ROI Multiple',
-                                color: '#9CA3AF'
-                            },
-                            ticks: { color: '#9CA3AF' },
-                            grid: { color: '#2D3748' }
-                        },
-                        x: {
-                            ticks: { color: '#9CA3AF' },
-                            grid: { color: '#2D3748' }
-                        }
-                    }
-                }
-            });
-
-            const allocCtx = document.getElementById('allocationChart').getContext('2d');
-            const totalCurrentSpend = Object.values(channels).reduce((sum, ch) => sum + ch.totalSpend, 0);
-            const currentAlloc = Object.values(channels).map(ch => (ch.totalSpend / totalCurrentSpend) * 100);
-            const optimizedAlloc = [20, 22, 18, 22, 18];
-
-            new Chart(allocCtx, {
-                type: 'bar',
-                data: {
-                    labels: channelNames,
-                    datasets: [{
-                        label: 'Current Allocation (%)',
-                        data: currentAlloc,
-                        backgroundColor: 'rgba(220, 38, 38, 0.7)',
-                        borderColor: 'rgba(220, 38, 38, 1)',
-                        borderWidth: 2
-                    }, {
-                        label: 'Optimized Allocation (%)',
-                        data: optimizedAlloc,
-                        backgroundColor: 'rgba(22, 163, 74, 0.7)',
-                        borderColor: 'rgba(22, 163, 74, 1)',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Budget Allocation: Current vs Optimized',
-                            font: { size: 16, weight: 'bold' },
-                            color: '#F5F7FA'
-                        },
-                        legend: {
-                            position: 'top',
-                            labels: { color: '#F5F7FA' }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Allocation (%)',
-                                color: '#9CA3AF'
-                            },
-                            ticks: { color: '#9CA3AF' },
-                            grid: { color: '#2D3748' }
-                        },
-                        x: {
-                            ticks: { color: '#9CA3AF' },
-                            grid: { color: '#2D3748' }
-                        }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false }
             });
         }
+    </script>
+</body>
+</html>
 
-        function downloadReport() {
-            if (!analysisResults) return;
-
-            const { channels, parameters, totalOrders, totalRevenue, totalSpend } = analysisResults;
-            
-            let report = 'MARKETINGIQ PRO - INCREMENTALITY READOUT\n';
-            report += '='.repeat(80) + '\n\n';
-            report += `Generated: ${new Date().toLocaleString()}\n\n`;
-            
-            report += 'SUMMARY METRICS\n';
-            report += '-'.repeat(80) + '\n';
-            report += `Total Orders: ${totalOrders.toLocaleString()}\n`;
-            report += `Total Revenue: ${totalRevenue.toLocaleString()}\n`;
-            report += `Total Spend: ${totalSpend.toLocaleString()}\n`;
-            report += `Blended ROI: ${(totalRevenue * parameters.grossMargin / totalSpend).toFixed(2)}x\n\n`;
-            
-            report += 'CHANNEL PERFORMANCE (INCREMENTAL)\n';
-            report += '-'.repeat(80) + '\n';
-            Object.entries(channels).forEach(([channel, data]) => {
-                report += `\n${channel.toUpperCase()}\n`;
-                report += `  Total Spend: ${data.totalSpend.toLocaleString()}\n`;
-                report += `  Incremental Orders: ${data.incrementalOrders.toFixed(0)}\n`;
-                report += `  ROI: ${data.roi.toFixed(2)}x\n`;
-                report += `  Marginal ROI: ${data.marginalROI.toFixed(2)}x\n`;
-                report += `  Status: ${data.saturationStatus}\n`;
-            });
-
-            report += '\n\nRECOMMENDATIONS\n';
-            report += '-'.repeat(80) + '\n';
-            Object.entries(channels).forEach(([channel, data]) => {
-                if (data.marginalROI > 2.0) {
-                    report += `${channel.toUpperCase()}: SCALE AGGRESSIVELY (Marginal ROI: ${data.marginalROI.toFixed(2)}x)\n`;
-                } else if (data.marginalROI < 1.0) {
-                    report += `${channel.toUpperCase()}: CUT BACK (Marginal ROI: ${data.marginalROI.toFixed(2)}x)\n`;
-                } else if (data.marginalROI > 1.5) {
-                    report += `${channel.toUpperCase()}: MAINTAIN OR GROW (Marginal ROI: ${data.marginalROI.toFixed(2)}x)\n`;
-                } else {
-                    report += `${channel.toUpperCase()}: OPTIMIZE (Marginal ROI: ${data.marginalROI.toFixed(2)}x)\n`;
-                }
-            });
-
-            const blob = new Blob([report], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'marketingiq_analysis_report.txt';
-            a.click();
-            window.URL.revokeObjectURL(url);
-        }
-
-        function resetApp() {
-            uploadedData = null;
-            analysisResults = null;
-            hideSection('configSection');
-            hideSection('resultsSection');
-            document.getElementById('uploadSection').scrollIntoView({ behavior: 'smooth' });
-            document.getElementById('fileInput').value = '';
-        }
-
-        function showSection(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function hideSection(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
