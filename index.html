@@ -1229,4 +1229,175 @@ new_customer_rate, discount_flag, email_sms_index
                 type: 'bar',
                 data: {
                     labels: channelNames,
-                    datasets
+                    datasets: [{
+                        label: 'ROI',
+                        data: Object.values(channels).map(ch => ch.roi),
+                        backgroundColor: 'rgba(22, 163, 74, 0.7)',
+                        borderColor: 'rgba(22, 163, 74, 1)',
+                        borderWidth: 2
+                    }, {
+                        label: 'Marginal ROI',
+                        data: Object.values(channels).map(ch => ch.marginalROI),
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'ROI vs Marginal ROI by Channel',
+                            font: { size: 16, weight: 'bold' },
+                            color: '#F5F7FA'
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: { color: '#F5F7FA' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'ROI Multiple',
+                                color: '#9CA3AF'
+                            },
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#2D3748' }
+                        },
+                        x: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#2D3748' }
+                        }
+                    }
+                }
+            });
+
+            const allocCtx = document.getElementById('allocationChart').getContext('2d');
+            const totalCurrentSpend = Object.values(channels).reduce((sum, ch) => sum + ch.totalSpend, 0);
+            const currentAlloc = Object.values(channels).map(ch => (ch.totalSpend / totalCurrentSpend) * 100);
+            const optimizedAlloc = [20, 22, 18, 22, 18];
+
+            new Chart(allocCtx, {
+                type: 'bar',
+                data: {
+                    labels: channelNames,
+                    datasets: [{
+                        label: 'Current Allocation (%)',
+                        data: currentAlloc,
+                        backgroundColor: 'rgba(220, 38, 38, 0.7)',
+                        borderColor: 'rgba(220, 38, 38, 1)',
+                        borderWidth: 2
+                    }, {
+                        label: 'Optimized Allocation (%)',
+                        data: optimizedAlloc,
+                        backgroundColor: 'rgba(22, 163, 74, 0.7)',
+                        borderColor: 'rgba(22, 163, 74, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Budget Allocation: Current vs Optimized',
+                            font: { size: 16, weight: 'bold' },
+                            color: '#F5F7FA'
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: { color: '#F5F7FA' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Allocation (%)',
+                                color: '#9CA3AF'
+                            },
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#2D3748' }
+                        },
+                        x: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#2D3748' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function downloadReport() {
+            if (!analysisResults) return;
+
+            const { channels, parameters, totalOrders, totalRevenue, totalSpend } = analysisResults;
+            
+            let report = 'MARKETINGIQ PRO - INCREMENTALITY READOUT\n';
+            report += '='.repeat(80) + '\n\n';
+            report += `Generated: ${new Date().toLocaleString()}\n\n`;
+            
+            report += 'SUMMARY METRICS\n';
+            report += '-'.repeat(80) + '\n';
+            report += `Total Orders: ${totalOrders.toLocaleString()}\n`;
+            report += `Total Revenue: ${totalRevenue.toLocaleString()}\n`;
+            report += `Total Spend: ${totalSpend.toLocaleString()}\n`;
+            report += `Blended ROI: ${(totalRevenue * parameters.grossMargin / totalSpend).toFixed(2)}x\n\n`;
+            
+            report += 'CHANNEL PERFORMANCE (INCREMENTAL)\n';
+            report += '-'.repeat(80) + '\n';
+            Object.entries(channels).forEach(([channel, data]) => {
+                report += `\n${channel.toUpperCase()}\n`;
+                report += `  Total Spend: ${data.totalSpend.toLocaleString()}\n`;
+                report += `  Incremental Orders: ${data.incrementalOrders.toFixed(0)}\n`;
+                report += `  ROI: ${data.roi.toFixed(2)}x\n`;
+                report += `  Marginal ROI: ${data.marginalROI.toFixed(2)}x\n`;
+                report += `  Status: ${data.saturationStatus}\n`;
+            });
+
+            report += '\n\nRECOMMENDATIONS\n';
+            report += '-'.repeat(80) + '\n';
+            Object.entries(channels).forEach(([channel, data]) => {
+                if (data.marginalROI > 2.0) {
+                    report += `${channel.toUpperCase()}: SCALE AGGRESSIVELY (Marginal ROI: ${data.marginalROI.toFixed(2)}x)\n`;
+                } else if (data.marginalROI < 1.0) {
+                    report += `${channel.toUpperCase()}: CUT BACK (Marginal ROI: ${data.marginalROI.toFixed(2)}x)\n`;
+                } else if (data.marginalROI > 1.5) {
+                    report += `${channel.toUpperCase()}: MAINTAIN OR GROW (Marginal ROI: ${data.marginalROI.toFixed(2)}x)\n`;
+                } else {
+                    report += `${channel.toUpperCase()}: OPTIMIZE (Marginal ROI: ${data.marginalROI.toFixed(2)}x)\n`;
+                }
+            });
+
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'marketingiq_analysis_report.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function resetApp() {
+            uploadedData = null;
+            analysisResults = null;
+            hideSection('configSection');
+            hideSection('resultsSection');
+            document.getElementById('uploadSection').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('fileInput').value = '';
+        }
+
+        function showSection(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function hideSection(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
